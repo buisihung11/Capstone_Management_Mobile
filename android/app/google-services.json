@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "291963665161",
-    "firebase_url": "https://capstone-swd1.firebaseio.com",
-    "project_id": "capstone-swd1",
-    "storage_bucket": "capstone-swd1.appspot.com"
+    "project_number": "995136449647",
+    "firebase_url": "https://capstone-scoring.firebaseio.com",
+    "project_id": "capstone-scoring",
+    "storage_bucket": "capstone-scoring.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:291963665161:android:d61a1562ced7bcc42db1d8",
+        "mobilesdk_app_id": "1:995136449647:android:4c2cd0b043a07b7e63719a",
         "android_client_info": {
-          "package_name": "com.fptuniversity"
+          "package_name": "hunghcc.capstone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "291963665161-ebhv3vj7mkq3udd380639gi5uv3emd5a.apps.googleusercontent.com",
+          "client_id": "995136449647-v3prbbb6qchhg5bgiaetom7m7tj3lpiq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.fptuniversity",
-            "certificate_hash": "7e24c01fe9a4bf43a0430ce7eee9d135281d21de"
+            "package_name": "hunghcc.capstone",
+            "certificate_hash": "52e74c3efb89a23a0a57c7391e671c898d48b4c2"
           }
         },
         {
-          "client_id": "291963665161-07pekac3qqb9rjl1d2a0f3a8dqal79ai.apps.googleusercontent.com",
+          "client_id": "995136449647-ip7k5hs7nq3gd2e3hekc1fteqovi32t2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAoQwv7DhILOsMLMbzFV-Y85zFZ2zQGs0o"
+          "current_key": "AIzaSyAp4CBIfnk-SZfWLPGkxWnhPPbrREhVYvE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "291963665161-07pekac3qqb9rjl1d2a0f3a8dqal79ai.apps.googleusercontent.com",
+              "client_id": "995136449647-ip7k5hs7nq3gd2e3hekc1fteqovi32t2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

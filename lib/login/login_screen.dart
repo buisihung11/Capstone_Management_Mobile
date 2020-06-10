@@ -72,6 +72,20 @@ class LoginForm extends StatelessWidget {
                               .add(LoginWithGooglePressed());
                         },
                       ),
+                      RaisedButton(
+                        onPressed: () {
+                          final snackbar = SnackBar(
+                            content: Text('Snackbar'),
+                            action: SnackBarAction(
+                              label: 'Go',
+                              onPressed: () => null,
+                            ),
+                          );
+
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        },
+                        child: Text('Show Snackbar'),
+                      )
                     ],
                   )),
                 )

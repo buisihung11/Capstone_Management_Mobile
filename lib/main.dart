@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_demo/authentication/authentication_bloc.dart';
@@ -27,7 +31,7 @@ void main() {
   );
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   final UserRepository _userRepository;
 
   App({Key key, @required UserRepository userRepository})
@@ -36,22 +40,111 @@ class App extends StatelessWidget {
         super(key: key);
 
   @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  @override
+  void initState() {
+    super.initState();
+    _saveDeviceToken();
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessagea: $message");
+        final snackbar = SnackBar(
+          content: Text("Receive message"),
+          action: SnackBarAction(
+            label: 'Go',
+            onPressed: () => null,
+          ),
+        );
+        print("After show");
+        Scaffold.of(context).showSnackBar(snackbar);
+        _showItemDialog(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
+  }
+
+  Widget _buildDialog(BuildContext context) {
+    return AlertDialog(
+      content: Text("Item  has been updated"),
+      actions: <Widget>[
+        FlatButton(
+          child: const Text('CLOSE'),
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+        ),
+        FlatButton(
+          child: const Text('SHOW'),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      ],
+    );
+  }
+
+  void _showItemDialog(Map<String, dynamic> message) {
+    print('Showing Dialog');
+    showDialog<bool>(
+        context: context, builder: (context) => _buildDialog(context));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is InAuthenticationState) {
-            return SplashScreen();
-          }
-          if (state is AuthenticatedState) {
-            return HomeScreen(name: state.displayName);
-          }
-          if (state is UnAuthenticationState) {
-            return LoginScreen(userRepository: _userRepository);
-          }
-        },
+      home: Scaffold(
+        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is InAuthenticationState) {
+              return SplashScreen();
+            }
+            if (state is AuthenticatedState) {
+              return HomeScreen(name: state.displayName);
+            }
+            if (state is UnAuthenticationState) {
+              return LoginScreen(userRepository: widget._userRepository);
+            }
+          },
+        ),
       ),
     );
+  }
+
+  _saveDeviceToken() async {
+    print('SaveToken');
+    // Get the current user
+    String uid = 'jeffd23';
+    // FirebaseUser user = await _auth.currentUser();
+
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = _db
+          .collection('users')
+          .document(uid)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
   }
 }
 

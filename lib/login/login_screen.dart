@@ -12,19 +12,19 @@ import 'index.dart';
 
 class LoginScreen extends StatelessWidget {
   final UserRepository _userRepository;
-
-  LoginScreen({Key key, @required UserRepository userRepository})
+  final String msg;
+  LoginScreen({Key key, @required UserRepository userRepository, this.msg})
       : assert(userRepository != null),
         _userRepository = userRepository,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('msg $msg');
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
       body: BlocProvider<LoginBloc>(
         create: (context) => LoginBloc(userRepository: _userRepository),
-        child: LoginForm(),
+        child: LoginForm(msg: msg),
       ),
     );
   }
@@ -32,7 +32,8 @@ class LoginScreen extends StatelessWidget {
 
 class LoginForm extends StatelessWidget {
   final Function onLogin;
-  const LoginForm({Key key, this.onLogin}) : super(key: key);
+  final String msg;
+  const LoginForm({Key key, this.onLogin, this.msg}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,18 @@ class LoginForm extends StatelessWidget {
       listener: (BuildContext context, LoginState state) {
         if (state is LoginSuccessState) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+        }
+        if (state is ErrorLoginState && state.errorCode == "network_error") {
+          print("$state ${state.errorCode == "network_error"}");
+          final snackbar = SnackBar(
+            content: Text(
+              "Network error. Please try again!",
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),
+            ),
+          );
+          Scaffold.of(context).showSnackBar(snackbar);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -54,8 +67,16 @@ class LoginForm extends StatelessWidget {
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      if (state is ErrorLoginState)
-                        Text('Login err: ${state.errorMessage}'),
+                      if (state is ErrorLoginState &&
+                          state.errorCode != "network_error")
+                        Text(
+                          'Login err: ${state.errorMessage}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                      if (msg != null) Text(msg),
                       Text(
                         'Please Sign in',
                         textAlign: TextAlign.center,
@@ -65,27 +86,21 @@ class LoginForm extends StatelessWidget {
                           fontSize: 15,
                         ),
                       ),
-                      SignInButton(
-                        Buttons.Google,
-                        onPressed: () {
-                          BlocProvider.of<LoginBloc>(context)
-                              .add(LoginWithGooglePressed());
-                        },
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          final snackbar = SnackBar(
-                            content: Text('Snackbar'),
-                            action: SnackBarAction(
-                              label: 'Go',
-                              onPressed: () => null,
+                      state is InLoginState
+                          ? RaisedButton(
+                              color: Colors.white,
+                              onPressed: () {},
+                              child: CircularProgressIndicator(),
+                            )
+                          : SignInButton(
+                              Buttons.Google,
+                              onPressed: () {
+                                if (state is! InLoginState) {
+                                  BlocProvider.of<LoginBloc>(context)
+                                      .add(LoginWithGooglePressed());
+                                }
+                              },
                             ),
-                          );
-
-                          Scaffold.of(context).showSnackBar(snackbar);
-                        },
-                        child: Text('Show Snackbar'),
-                      )
                     ],
                   )),
                 )

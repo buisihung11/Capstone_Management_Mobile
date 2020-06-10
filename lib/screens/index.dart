@@ -42,10 +42,70 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('User Img'),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      widget.name,
+                      style: TextStyle(color: Colors.white, fontSize: 10.0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Icon(Icons.exit_to_app),
+                  ),
+                  Text(
+                    "Logout",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () {
+                BlocProvider.of<AuthenticationBloc>(context).add(
+                  LoggedOut(),
+                );
+              },
+            )
+          ],
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Center(child: Text('Welcome ${widget.name}!')),
+          Container(child: Text('Welcome ${widget.name}!')),
+          ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text("Capstone 1"),
+                  subtitle: Text("Thanh Tam"),
+                  trailing: Text("Available"),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider(height: 16);
+              },
+              itemCount: 2),
         ],
       ),
     );

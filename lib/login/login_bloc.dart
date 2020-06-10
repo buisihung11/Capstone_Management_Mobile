@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_login_demo/login/index.dart';
 import 'package:flutter_login_demo/repositories/user_repository.dart';
@@ -25,9 +26,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         FirebaseUser user = await userRepository.signInWithGoogle();
         await user.getIdToken();
         yield LoginSuccessState();
-      } catch (e) {
+      } on PlatformException catch (e) {
         print('Catch Error In Bloc');
-        yield ErrorLoginState(e.toString());
+        yield ErrorLoginState(e.toString(), e.code);
       }
     }
   }

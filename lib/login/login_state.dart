@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 abstract class LoginState extends Equatable {
-
   final List propss;
   LoginState([this.propss]);
 
@@ -13,7 +12,6 @@ abstract class LoginState extends Equatable {
 
 /// UnInitialized
 class UnLoginState extends LoginState {
-
   UnLoginState();
 
   @override
@@ -22,29 +20,26 @@ class UnLoginState extends LoginState {
 
 /// Initialized
 class InLoginState extends LoginState {
-
   InLoginState();
 
   @override
   String toString() => 'InLoginState';
-
 }
 
 /// Logged in
 class LoginSuccessState extends LoginState {
-
   LoginSuccessState();
 
   @override
   String toString() => 'InLoginState';
-
 }
 
 class ErrorLoginState extends LoginState {
   final String errorMessage;
+  final String errorCode;
 
-  ErrorLoginState(this.errorMessage): super([errorMessage]);
-  
+  ErrorLoginState(this.errorMessage, this.errorCode) : super([errorMessage]);
+
   @override
   String toString() => 'ErrorLoginState';
 }

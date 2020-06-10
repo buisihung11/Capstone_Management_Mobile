@@ -13,4 +13,5 @@ abstract class LoginEvent extends Equatable {
 }
 
 class LoginWithGooglePressed extends LoginEvent {}
+
 class LoginSuccess extends LoginEvent {}

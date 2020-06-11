@@ -69,7 +69,7 @@ class AuthenticationScreenState extends State<AuthenticationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(currentState.displayName),
+              Text(currentState.user.displayName),
             ],
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,9 +18,9 @@ class SplashScreen extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
-  final String name;
+  final FirebaseUser user;
 
-  HomeScreen({Key key, @required this.name}) : super(key: key);
+  HomeScreen({Key key, @required this.user}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -49,17 +50,21 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Colors.black,
               ),
-              child: Stack(
+              child: Row(
                 children: <Widget>[
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('User Img'),
+                    child: Image.network(
+                      widget.user.photoUrl,
+                      height: 100.0,
+                      width: 100.0,
+                    ),
                   ),
                   Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.centerLeft,
                     child: Text(
-                      widget.name,
-                      style: TextStyle(color: Colors.white, fontSize: 10.0),
+                      widget.user.displayName,
+                      style: TextStyle(color: Colors.white, fontSize: 15.0),
                     ),
                   ),
                 ],
@@ -92,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Container(child: Text('Welcome ${widget.name}!')),
+          Container(child: Text('Welcome ${widget.user.displayName}!')),
           ListView.separated(
               shrinkWrap: true,
               itemBuilder: (context, index) {

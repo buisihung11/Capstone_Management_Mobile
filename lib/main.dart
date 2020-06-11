@@ -270,6 +270,7 @@ void main() {
       create: (context) =>
           AuthenticationBloc(userRepository: userRepository)..add(AppStarted()),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: App(
           userRepository: userRepository,
         ),
@@ -328,9 +329,9 @@ class _AppState extends State<App> {
     );
   }
 
-  Widget _buildDialog(BuildContext context) {
+  Widget _buildDialog(BuildContext context,String msg) {
     return AlertDialog(
-      content: Text("Item  has been updated"),
+      content: Text(msg),
       actions: <Widget>[
         FlatButton(
           child: const Text('CLOSE'),
@@ -351,7 +352,7 @@ class _AppState extends State<App> {
   void _showItemDialog(Map<String, dynamic> message) {
     print('Showing Dialog');
     showDialog<bool>(
-        context: context, builder: (context) => _buildDialog(context));
+        context: context, builder: (context) => _buildDialog(context, message['notification']['title']));
   }
 
   @override
@@ -363,7 +364,7 @@ class _AppState extends State<App> {
             return SplashScreen();
           }
           if (state is AuthenticatedState) {
-            return HomeScreen(name: state.displayName);
+            return HomeScreen(user: state.user);
           }
           if (state is UnAuthenticationState) {
             return LoginScreen(

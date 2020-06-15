@@ -28,7 +28,6 @@ class InAuthenticationState extends AuthenticationState {
 class AuthenticatedState extends AuthenticationState {
   final FirebaseUser user;
   AuthenticatedState(this.user) : super([user]);
-
   @override
   String toString() => 'AuthenticatedState ${user.displayName}';
 }

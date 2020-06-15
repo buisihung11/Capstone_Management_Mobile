@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_demo/authentication/authentication_bloc.dart';
 import 'package:flutter_login_demo/authentication/authentication_event.dart';
+import 'package:flutter_login_demo/blocs/Capstone/index.dart';
+import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
 import 'package:flutter_login_demo/login/index.dart';
+import 'package:flutter_login_demo/repositories/capstoneRepository.dart';
 import 'package:flutter_login_demo/screens/index.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -295,6 +298,9 @@ class _AppState extends State<App> {
   final Firestore _db = Firestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
+  final CapstoneRepository capstoneRepository = new CapstoneRepository(
+      capstoneApiClient: new CapstoneApiClient(client: null));
+
   String msg;
 
   @override
@@ -329,7 +335,7 @@ class _AppState extends State<App> {
     );
   }
 
-  Widget _buildDialog(BuildContext context,String msg) {
+  Widget _buildDialog(BuildContext context, String msg) {
     return AlertDialog(
       content: Text(msg),
       actions: <Widget>[
@@ -352,7 +358,9 @@ class _AppState extends State<App> {
   void _showItemDialog(Map<String, dynamic> message) {
     print('Showing Dialog');
     showDialog<bool>(
-        context: context, builder: (context) => _buildDialog(context, message['notification']['title']));
+        context: context,
+        builder: (context) =>
+            _buildDialog(context, message['notification']['title']));
   }
 
   @override
@@ -364,7 +372,10 @@ class _AppState extends State<App> {
             return SplashScreen();
           }
           if (state is AuthenticatedState) {
-            return HomeScreen(user: state.user);
+            return CapstonePage(
+              user: state.user,
+              capstoneRepository: capstoneRepository,
+            );
           }
           if (state is UnAuthenticationState) {
             return LoginScreen(

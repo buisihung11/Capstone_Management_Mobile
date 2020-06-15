@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_demo/authentication/index.dart';
+import 'package:flutter_login_demo/blocs/authentication/index.dart';
 import 'package:flutter_login_demo/repositories/user_repository.dart';
 
 class AuthenticationPage extends StatefulWidget {

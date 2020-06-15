@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_demo/authentication/index.dart';
-import 'package:flutter_login_demo/login/index.dart';
-import 'package:flutter_login_demo/main.dart';
+import 'package:flutter_login_demo/blocs/authentication/index.dart';
+import 'package:flutter_login_demo/blocs/login/login_screen.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({

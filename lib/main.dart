@@ -4,18 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_demo/authentication/authentication_bloc.dart';
-import 'package:flutter_login_demo/authentication/authentication_event.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
+import 'package:flutter_login_demo/blocs/login/index.dart';
 import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
-import 'package:flutter_login_demo/login/index.dart';
 import 'package:flutter_login_demo/repositories/capstoneRepository.dart';
 import 'package:flutter_login_demo/screens/index.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'authentication/authentication_state.dart';
+import 'blocs/authentication/index.dart';
 import 'repositories/user_repository.dart';
 
 // Copyright 2019 The Chromium Authors. All rights reserved.
@@ -23,9 +20,6 @@ import 'repositories/user_repository.dart';
 // found in the LICENSE file.
 
 import 'dart:async';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 
 final Map<String, Item> _items = <String, Item>{};
 Item _itemForMessage(Map<String, dynamic> message) {
@@ -409,143 +403,6 @@ class _AppState extends State<App> {
         'platform': Platform.operatingSystem // optional
       });
     }
-  }
-}
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser _user;
-
-  GoogleSignIn _googleSignIn = new GoogleSignIn();
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
-      home: Scaffold(
-        body: Container(
-            color: Colors.orange[300],
-            child: Center(
-              child: _isLoggedIn
-                  ? Stack(
-                      children: <Widget>[
-                        Scaffold(
-                          // backgroundColor: Colors.red[100],
-                          appBar: AppBar(
-                            title: Text("FPT Capstone Management"),
-                          ),
-                          drawer: Drawer(
-                            child: ListView(
-                              children: <Widget>[
-                                DrawerHeader(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Image.network(
-                                          _googleSignIn.currentUser.photoUrl,
-                                          height: 100.0,
-                                          width: 100.0,
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          _googleSignIn.currentUser.displayName,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10.0),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                ListTile(
-                                  title: Text("Logout"),
-                                  onTap: () {
-                                    gooleSignout();
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                          body: ListView.separated(
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text("Capstone 1"),
-                                  subtitle: Text("Thanh Tam"),
-                                  trailing: Text("Available"),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Divider(height: 16);
-                              },
-                              itemCount: 2),
-                        ),
-                      ],
-                    )
-                  : Stack(
-                      children: <Widget>[
-                        Image.asset('assets/FPT.png'),
-                        Container(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SignInButton(
-                                  Buttons.Google,
-                                  onPressed: () {
-                                    handleSignIn();
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-            )),
-      ),
-    );
-  }
-
-  bool _isLoggedIn = false;
-
-  Future<void> handleSignIn() async {
-    GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
-
-    AuthCredential credential = GoogleAuthProvider.getCredential(
-        idToken: googleSignInAuthentication.idToken,
-        accessToken: googleSignInAuthentication.accessToken);
-
-    AuthResult result = (await _auth.signInWithCredential(credential));
-
-    _user = result.user;
-
-    setState(() {
-      _isLoggedIn = true;
-    });
-  }
-
-  Future<void> gooleSignout() async {
-    await _auth.signOut().then((onValue) {
-      _googleSignIn.signOut();
-      setState(() {
-        _isLoggedIn = false;
-      });
-    });
   }
 }
 

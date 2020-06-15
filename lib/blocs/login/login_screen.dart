@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_demo/authentication/authentication_event.dart';
-import 'package:flutter_login_demo/authentication/index.dart';
-import 'package:flutter_login_demo/login/login_bloc.dart';
-import 'package:flutter_login_demo/main.dart';
+import 'package:flutter_login_demo/blocs/authentication/index.dart';
 import 'package:flutter_login_demo/repositories/user_repository.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';

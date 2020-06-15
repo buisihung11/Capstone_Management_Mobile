@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:developer' as developer;
-
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_login_demo/login/index.dart';
+import 'package:flutter_login_demo/blocs/login/index.dart';
 import 'package:flutter_login_demo/repositories/user_repository.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

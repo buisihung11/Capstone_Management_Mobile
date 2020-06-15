@@ -313,9 +313,6 @@ class _AppState extends State<App> {
         // );
         // print("After show");
         // Scaffold.of(context).showSnackBar(snackbar);
-        setState(() {
-          msg = message['notification']['title'];
-        });
         _showItemDialog(message);
       },
       onLaunch: (Map<String, dynamic> message) async {

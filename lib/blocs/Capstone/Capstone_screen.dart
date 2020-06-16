@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login_demo/blocs/Capstone/Capstone_details.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
 
@@ -38,7 +39,12 @@ class CapstoneScreenState extends State<CapstoneScreen> {
       subtitle: Text(capstone.mentorName),
       trailing: Text(capstone.currentPhase),
       onTap: () {
-        print("Taped ${capstone.name} ");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CapstonesDetails(),
+          ),
+        );
       },
     );
   }

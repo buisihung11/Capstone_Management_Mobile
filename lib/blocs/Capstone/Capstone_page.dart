@@ -52,9 +52,13 @@ class _CapstonePageState extends State<CapstonePage> {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.user.displayName,
-                      style: TextStyle(color: Colors.white, fontSize: 15.0),
+                    child: Container(
+                      width: 150,
+                      child: Text(
+                        widget.user.displayName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white, fontSize: 15.0),
+                      ),
                     ),
                   ),
                 ],

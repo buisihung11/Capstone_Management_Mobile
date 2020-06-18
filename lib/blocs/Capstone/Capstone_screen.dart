@@ -91,6 +91,7 @@ class CapstoneScreenState extends State<CapstoneScreen> {
           ));
         }
         if (currentState is CapstoneLoadSuccess) {
+          print(currentState);
           print('Load success ${currentState.result}');
           return SingleChildScrollView(
             child: Column(

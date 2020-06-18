@@ -14,6 +14,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'blocs/authentication/index.dart';
 import 'repositories/user_repository.dart';
+import 'package:http/http.dart' as http;
 
 // Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -293,7 +294,7 @@ class _AppState extends State<App> {
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
   final CapstoneRepository capstoneRepository = new CapstoneRepository(
-      capstoneApiClient: new CapstoneApiClient(client: null));
+      capstoneApiClient: new CapstoneApiClient(client: http.Client()));
 
   String msg;
 

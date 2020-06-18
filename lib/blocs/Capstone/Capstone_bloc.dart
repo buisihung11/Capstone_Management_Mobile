@@ -39,6 +39,7 @@ class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
     } catch (err, stackTrace) {
       print(err);
       yield CapstoneFailureState();
+      print("error at capstone bloc");
     }
   }
 }

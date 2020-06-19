@@ -1,11 +1,13 @@
-import 'dart:io';
-
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' show Client;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
 
 class CapstoneApiClient {
-  static const baseUrl = "";
-  final HttpClient client;
+  static const baseUrl = "https://fucapstone.azurewebsites.net/api";
+  Client client = Client();
 
   CapstoneApiClient({@required this.client});
 
@@ -13,109 +15,22 @@ class CapstoneApiClient {
     final String locationUrl = '$baseUrl/capstones';
 
     // get response
+    final response = await client
+        .get('https://fucapstone.azurewebsites.net/api/capstones?Page=1');
 
-    // decode
-
-    // convert to model
-    return Future.delayed(Duration(seconds: 2), () {
-      return <Capstone>[
-        new Capstone(
-          currentPhase: "Review Doc",
-          id: "1",
-          mentorName: "ThanhPC",
-          name: "Capstone Management",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-        new Capstone(
-          currentPhase: "Bao ve lan 1",
-          id: "2",
-          mentorName: "PhuongLK",
-          name: "Bus tracking FPT",
-        ),
-      ];
-    });
+    if (response.statusCode == 200) {
+      // decode
+      final decodebody = json.decode(response.body);
+      // convert to model
+      final List content = decodebody["content"];
+      final List<Capstone> result = new List();
+      for (dynamic capstone in content) {
+        result.add(Capstone.fromJson(capstone));
+      }
+      print('$content["capstoneId"]');
+      return result;
+    } else {
+      throw Exception('Failed to load capstone');
+    }
   }
 }

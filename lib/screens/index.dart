@@ -62,9 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.user.displayName,
-                      style: TextStyle(color: Colors.white, fontSize: 15.0),
+                    child: Container(
+                      width: 100,
+                      child: Text(
+                        widget.user.displayName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.red, fontSize: 13.0),
+                      ),
                     ),
                   ),
                 ],

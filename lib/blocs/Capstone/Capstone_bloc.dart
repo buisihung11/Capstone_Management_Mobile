@@ -27,13 +27,6 @@ class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
       }
       if (event is CapstoneRefreshRequest) {
         final result = await capstoneRepository.getCapstoneList();
-        result.insert(
-            0,
-            new Capstone(
-              name: "After Refershcapstone",
-              currentPhase: "Document",
-              mentorName: "KhanhKT",
-            ));
         yield CapstoneLoadSuccess(result);
       }
     } catch (err, stackTrace) {

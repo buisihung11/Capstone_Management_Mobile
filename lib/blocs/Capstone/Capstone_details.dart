@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
+
 class CapstonesDetails extends StatefulWidget {
   @override
   _CapstonesDetails createState() => _CapstonesDetails();
 }
 
 class _CapstonesDetails extends State<CapstonesDetails> {
-  List chapters = [
-    'Tam',
-    'Hung'
-  ];
+  List chapters = ['Tam', 'Hung'];
 
-  List topics = [
-    'SE62752','SE66662'
-  ];
+  List topics = ['SE62752', 'SE66662'];
 
-  List major = [
-    'SE', 'SE'
-  ];
-
+  List major = ['SE', 'SE'];
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +66,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
+                    height: 55,
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -87,9 +81,9 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                     ),
                     child: ListTile(
                       leading: Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                        child: Image.asset('assets/FPT.png')
-                      ),
+                          padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                          height: 75,
+                          child: Image.asset('assets/FPT.png')),
                       //Ten sinh vien
                       title: Text(
                         chapters[index].toString().toUpperCase(),
@@ -123,9 +117,18 @@ class _CapstonesDetails extends State<CapstonesDetails> {
           ],
         ),
       ),
-      persistentFooterButtons: <Widget>[
-        Text('Hoc Ky: Fall 2020')
-      ],
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+            Text(
+              'Fall 2020',
+              style: TextStyle(
+                fontSize: 20
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

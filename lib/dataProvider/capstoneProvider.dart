@@ -18,19 +18,17 @@ class CapstoneApiClient {
     final response = await client
         .get('https://fucapstone.azurewebsites.net/api/capstones?Page=1');
 
-    // decode
-    final decodebody = json.decode(response.body);
-    // convert to model
-    final List content = decodebody["content"];
-    final List<Capstone> result = new List();
-    for (dynamic capstone in content) {
-      result.add(Capstone.fromJson(capstone));
-    }
-    print('$content["capstoneId"]');
     if (response.statusCode == 200) {
-      return <Capstone>[
-        //Capstone.fromJson(json.decode())
-      ];
+      // decode
+      final decodebody = json.decode(response.body);
+      // convert to model
+      final List content = decodebody["content"];
+      final List<Capstone> result = new List();
+      for (dynamic capstone in content) {
+        result.add(Capstone.fromJson(capstone));
+      }
+      print('$content["capstoneId"]');
+      return result;
     } else {
       throw Exception('Failed to load capstone');
     }

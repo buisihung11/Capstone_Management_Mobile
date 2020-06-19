@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_demo/blocs/Capstone/Capstone_details.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
+import 'package:intl/intl.dart';
 
 class CapstoneScreen extends StatefulWidget {
   const CapstoneScreen({
@@ -20,6 +21,8 @@ class CapstoneScreen extends StatefulWidget {
 class CapstoneScreenState extends State<CapstoneScreen> {
   Completer<void> _refreshCompleter;
   GlobalKey<RefreshIndicatorState> _refreshKey;
+  DateFormat dateFormat = DateFormat("dd-MM-yyyy");
+
   @override
   void initState() {
     super.initState();
@@ -35,9 +38,9 @@ class CapstoneScreenState extends State<CapstoneScreen> {
 
   Widget _getItem(Capstone capstone) {
     return ListTile(
-      title: Text(capstone.name),
-      subtitle: Text(capstone.mentorName),
-      trailing: Text(capstone.currentPhase),
+      title: Text(capstone.name ?? capstone.name ?? "DEfault name"),
+      subtitle: Text(capstone.mentorName ?? "DEfault mentorname"),
+      trailing: Text(dateFormat.format(dateFormat.parse(capstone.dateCreate))),
       onTap: () {
         Navigator.push(
           context,
@@ -92,10 +95,16 @@ class CapstoneScreenState extends State<CapstoneScreen> {
         }
         if (currentState is CapstoneLoadSuccess) {
           print(currentState);
-          print('Load success ${currentState.result}');
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                Text(
+                  "Your enrolled capstones: ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   height: MediaQuery.of(context).size.height,
                   child: RefreshIndicator(

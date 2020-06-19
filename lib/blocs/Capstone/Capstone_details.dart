@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_demo/models/capstone.dart';
 
 class CapstonesDetails extends StatefulWidget {
   @override
@@ -6,25 +7,16 @@ class CapstonesDetails extends StatefulWidget {
 }
 
 class _CapstonesDetails extends State<CapstonesDetails> {
-  List chapters = [
-    'Introduction',
-    'Adobe XD',
-    'Sketch Basics',
-    'Figma Mastery',
-  ];
+  List chapters = ['Tam', 'Hung'];
 
-  List topics = [
-    'Introduction to the course',
-    'Detailed tutorials on adobe XD',
-    'Introduction to the course',
-    'Sketch beginner to expert series',
-    'Figma from basic to advanced',
-  ];
+  List topics = ['SE62752', 'SE66662'];
+
+  List major = ['SE', 'SE'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Capstone detail', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.orange,
@@ -37,7 +29,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Design Tool Bundle'.toUpperCase(),
+              'Capstone Name'.toUpperCase(),
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -46,8 +38,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
             ListTile(
               contentPadding: EdgeInsets.all(0),
               leading: CircleAvatar(
-                backgroundImage: NetworkImage('https://i.pravatar.cc/100'),
-                backgroundColor: Colors.grey[300],
+                child: Image.asset('assets/hung.jpg'),
               ),
               title: Text(
                 'Hung',
@@ -64,6 +55,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                   fontSize: 12,
                 ),
               ),
+              trailing: Text('1-1-2020'),
             ),
             Padding(
               padding: EdgeInsets.only(top: 15),
@@ -74,6 +66,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
+                    height: 55,
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -88,16 +81,10 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                     ),
                     child: ListTile(
                       leading: Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                        child: Text(
-                          '$index',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                          padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                          height: 75,
+                          child: Image.asset('assets/FPT.png')),
+                      //Ten sinh vien
                       title: Text(
                         chapters[index].toString().toUpperCase(),
                         style: TextStyle(
@@ -106,23 +93,39 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      //Ma so sinh vien
                       subtitle: Text(
                         topics[index],
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 14,
+                        ),
+                      ),
+                      //Ma Major
+                      trailing: Text(
+                        major[index],
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 14,
                         ),
-                      ),
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        size: 18,
-                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   );
                 },
               ),
             ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+            Text(
+              'Fall 2020',
+              style: TextStyle(
+                fontSize: 20
+              ),
+            )
           ],
         ),
       ),

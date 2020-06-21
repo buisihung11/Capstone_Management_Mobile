@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,9 @@ import 'package:flutter_login_demo/blocs/login/index.dart';
 import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
 import 'package:flutter_login_demo/repositories/capstoneRepository.dart';
 import 'package:flutter_login_demo/screens/index.dart';
+import 'package:flutter_login_demo/utils/index.dart';
 import 'blocs/authentication/index.dart';
 import 'repositories/user_repository.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -118,17 +116,17 @@ class _AppState extends State<App> {
         builder: (context, state) {
           if (state is InAuthenticationState) {
             return SplashScreen();
-          }
-          if (state is AuthenticatedState) {
+          } else if (state is AuthenticatedState) {
             return CapstonePage(
               user: state.user,
               capstoneRepository: capstoneRepository,
             );
-          }
-          if (state is UnAuthenticationState) {
+          } else if (state is UnAuthenticationState ||
+              state is ErrorAuthenticationState) {
             return LoginScreen(
                 userRepository: widget._userRepository, msg: msg);
           }
+          return SplashScreen();
         },
       ),
     );
@@ -136,26 +134,25 @@ class _AppState extends State<App> {
 
   _saveDeviceToken() async {
     print('SaveToken');
-    // Get the current user
-    String uid = 'jeffd23';
-    // FirebaseUser user = await _auth.currentUser();
 
     // Get the token for this device
     String fcmToken = await _fcm.getToken();
 
-    // Save it to Firestore
+    // Save it to local
+    setFCMToken(fcmToken);
     if (fcmToken != null) {
-      var tokens = _db
-          .collection('users')
-          .document(uid)
-          .collection('tokens')
-          .document(fcmToken);
+      // var tokens = _db
+      //     .collection('users')
+      //     .document(uid)
+      //     .collection('tokens')
+      //     .document(fcmToken);
 
-      await tokens.setData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(), // optional
-        'platform': Platform.operatingSystem // optional
-      });
+      // await tokens.setData({
+      //   'token': fcmToken,
+      //   'createdAt': FieldValue.serverTimestamp(), // optional
+      //   'platform': Platform.operatingSystem // optional
+      // });
+
     }
   }
 }

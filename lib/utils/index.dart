@@ -47,7 +47,6 @@ class MyRequest {
     baseUrl: SERVER_API,
     headers: {
       Headers.contentTypeHeader: "application/json",
-      "Authorization": "Bearer Token",
     },
   );
   Dio _inner;
@@ -61,7 +60,7 @@ class MyRequest {
   }
 
   set setToken(token) {
-    _inner.options.headers["authorizaton"] = "Bearer $token";
+    options.headers["Authorization"] = "Bearer $token";
   }
 }
 

@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:developer' as developer;
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
-import 'package:flutter_login_demo/models/capstone.dart';
 import 'package:flutter_login_demo/repositories/capstoneRepository.dart';
 
 class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
@@ -29,7 +26,7 @@ class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
         final result = await capstoneRepository.getCapstoneList();
         yield CapstoneLoadSuccess(result);
       }
-    } catch (err, stackTrace) {
+    } catch (err) {
       print(err);
       yield CapstoneFailureState();
       print("error at capstone bloc");

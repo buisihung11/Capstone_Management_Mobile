@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_login_demo/models/capstone.dart';
 import 'package:flutter_login_demo/utils/index.dart';
 
 class CapstoneApiClient {
-  final request = MyRequest();
   CapstoneApiClient();
 
   Future<List<Capstone>> getCapstoneList() async {
     // get response
-    final response = await request.request.get('/capstones');
+    final response = await request.get('/capstones');
 
     print(response);
     if (response.statusCode == 200) {

@@ -3,6 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constraints.dart';
 
+Future<bool> setFCMToken(String value) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setString('FCMToken', value);
+}
+
 Future<bool> setToken(String value) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.setString('token', value);
@@ -42,7 +47,7 @@ class MyRequest {
     baseUrl: SERVER_API,
     headers: {
       Headers.contentTypeHeader: "application/json",
-      Headers.wwwAuthenticateHeader: "Bearer Token",
+      "Authorization": "Bearer Token",
     },
   );
   Dio _inner;
@@ -54,4 +59,11 @@ class MyRequest {
   Dio get request {
     return _inner;
   }
+
+  set setToken(token) {
+    _inner.options.headers["authorizaton"] = "Bearer $token";
+  }
 }
+
+final requestObj = new MyRequest();
+final request = requestObj.request;

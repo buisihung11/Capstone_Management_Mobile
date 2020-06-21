@@ -22,7 +22,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         yield InLoginState();
         FirebaseUser user = await userRepository.signInWithGoogle();
-        await user.getIdToken();
+        final firebaseToken = await user.getIdToken();
+        // send token to server
+
+        // save JWT Token
+
+        // fetch user
         yield LoginSuccessState();
       } on PlatformException catch (e) {
         print('Catch Error In Bloc');

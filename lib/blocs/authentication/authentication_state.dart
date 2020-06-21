@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_login_demo/models/user.dart';
 
 abstract class AuthenticationState extends Equatable {
   final List propss;
@@ -26,7 +27,7 @@ class InAuthenticationState extends AuthenticationState {
 }
 
 class AuthenticatedState extends AuthenticationState {
-  final FirebaseUser user;
+  final User user;
   AuthenticatedState(this.user) : super([user]);
   @override
   String toString() => 'AuthenticatedState ${user.displayName}';

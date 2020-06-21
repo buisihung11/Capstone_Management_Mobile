@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_login_demo/blocs/authentication/index.dart';
+import 'package:flutter_login_demo/models/user.dart';
 import 'package:flutter_login_demo/repositories/user_repository.dart';
 
 class AuthenticationBloc
@@ -33,16 +34,20 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAppStartedToState() async* {
     final _isSignnedIn = await _userRepository.isSignedIn();
     if (_isSignnedIn) {
-      final user = await _userRepository.getUser();
-      yield AuthenticatedState(user);
+      final res = await _userRepository.getUser();
+      yield AuthenticatedState(User.fromJSON(res.data));
     } else {
       yield UnAuthenticationState();
     }
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    final user = await _userRepository.getUser();
-    yield AuthenticatedState(user);
+    try {
+      final res = await _userRepository.getUser();
+      yield AuthenticatedState(User.fromJSON(res.data));
+    } catch (e) {
+      yield ErrorAuthenticationState(e.toString());
+    }
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {

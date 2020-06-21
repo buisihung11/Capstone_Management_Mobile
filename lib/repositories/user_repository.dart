@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_login_demo/utils/index.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  // final request = MyRequest();
 
   UserRepository({FirebaseAuth firebaseAuth, GoogleSignIn googleSignin})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
@@ -49,11 +51,45 @@ class UserRepository {
   }
 
   Future<bool> isSignedIn() async {
-    final currentUser = await _firebaseAuth.currentUser();
-    return currentUser != null;
+    // check if has token and valid token
+    try {
+      final jwtToken = await getToken();
+      if (jwtToken != null) {
+        // TODO: set request jwt
+        requestObj.setToken = jwtToken;
+        final res = await request
+            .get("/user-info", queryParameters: {"token": jwtToken});
+        return true;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return false;
   }
 
-  Future<FirebaseUser> getUser() async {
-    return (await _firebaseAuth.currentUser());
+  Future<dynamic> getUser() async {
+    // check token
+    try {
+      final jwtToken = await getToken();
+      if (jwtToken == null) {
+        return null;
+      }
+      // set token to request
+      requestObj.setToken = jwtToken;
+      return request.get("/user-info", queryParameters: {"token": jwtToken});
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  // loginToServer
+  Future<dynamic> loginWithServer(firebaseToken) {
+    return request.get(
+      "/login-by-google",
+      queryParameters: {
+        "token": firebaseToken,
+      },
+    );
   }
 }

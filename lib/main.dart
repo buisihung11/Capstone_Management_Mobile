@@ -49,7 +49,8 @@ class _AppState extends State<App> {
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
   final CapstoneRepository capstoneRepository = new CapstoneRepository(
-      capstoneApiClient: new CapstoneApiClient(client: http.Client()));
+    capstoneApiClient: new CapstoneApiClient(),
+  );
 
   String msg;
 

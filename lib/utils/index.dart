@@ -1,25 +1,23 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constraints.dart';
 
-// class RequestClient extends BaseClient {
-//   Client _inner;
-//   static final String baseURL = SERVER_API;
+Future<bool> setToken(String value) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setString('token', value);
+}
 
-//   RequestClient() {
-//     _inner = Client();
-//   }
-
-//   Future<StreamedResponse> send(BaseRequest request) {
-//     request.headers["authorization"] = "Bearer token";
-//     return _inner.send(request);
-//   }
-// }
+Future<String> getToken() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('token');
+}
 
 class CustomInterceptors extends InterceptorsWrapper {
   @override
   Future onRequest(RequestOptions options) {
-    print("REQUEST[${options?.method}] => PATH: ${options?.path}");
+    print(
+        "REQUEST[${options?.method}] => PATH: ${options?.path} HEADER: ${options.headers.toString()}");
     return super.onRequest(options);
   }
 

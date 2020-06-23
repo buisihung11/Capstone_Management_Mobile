@@ -35,84 +35,27 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            ListTile(
-              contentPadding: EdgeInsets.all(0),
-              leading: CircleAvatar(
-                child: Image.asset('assets/hung.jpg'),
-              ),
-              title: Text(
-                'Hung',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+            Wrap(
+              spacing: 4.0,
+              children: <Widget>[
+                Text(
+                  'Lecturer'.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                'Lead Instructor',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
+                chip('Hung', Color(0xFFff8a65)),
+                Text(
+                  'Student'.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              trailing: Text('1-1-2020'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 15),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: chapters.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 55,
-                    margin: EdgeInsets.only(bottom: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[300],
-                          offset: Offset(0, 0),
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: ListTile(
-                      leading: Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                          height: 75,
-                          child: Image.asset('assets/FPT.png')),
-                      //Ten sinh vien
-                      title: Text(
-                        chapters[index].toString().toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      //Ma so sinh vien
-                      subtitle: Text(
-                        topics[index],
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontSize: 14,
-                        ),
-                      ),
-                      //Ma Major
-                      trailing: Text(
-                        major[index],
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                chip('Tam', Color(0xFFff8a65)),
+                chip('Bui Hung', Color(0xFFff8a65)),
+              ],
             ),
           ],
         ),
@@ -122,13 +65,31 @@ class _CapstonesDetails extends State<CapstonesDetails> {
           children: <Widget>[
             Text(
               'Fall 2020',
-              style: TextStyle(
-                fontSize: 20
-              ),
+              style: TextStyle(fontSize: 20),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget chip(String label, Color color) {
+    return Chip(
+      labelPadding: EdgeInsets.all(5.0),
+      avatar: CircleAvatar(
+        backgroundColor: Colors.grey.shade600,
+        child: Text(label[0].toUpperCase()),
+      ),
+      label: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: color,
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(6.0),
     );
   }
 }

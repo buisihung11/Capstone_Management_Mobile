@@ -64,8 +64,7 @@ class LoginForm extends StatelessWidget {
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      if (state is ErrorLoginState &&
-                          state.errorCode != "network_error")
+                      if (state is ErrorLoginState)
                         Text(
                           'Login err: ${state.errorMessage}',
                           textAlign: TextAlign.center,
@@ -73,7 +72,6 @@ class LoginForm extends StatelessWidget {
                             color: Colors.redAccent,
                           ),
                         ),
-                      if (msg != null) Text(msg),
                       Text(
                         'Please Sign in',
                         textAlign: TextAlign.center,

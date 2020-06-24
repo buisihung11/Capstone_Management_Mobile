@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
 import 'package:flutter_login_demo/blocs/authentication/index.dart';
+import 'package:flutter_login_demo/models/user.dart';
 import 'package:flutter_login_demo/repositories/capstoneRepository.dart';
 
 class CapstonePage extends StatefulWidget {
   static const String routeName = '/capstone';
   final CapstoneRepository capstoneRepository;
-  final FirebaseUser user;
+  final User user;
 
   const CapstonePage({Key key, this.capstoneRepository, this.user})
       : super(key: key);
@@ -45,7 +46,7 @@ class _CapstonePageState extends State<CapstonePage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Image.network(
-                      widget.user.photoUrl,
+                      widget.user.pictureUrl,
                       height: 100.0,
                       width: 100.0,
                     ),

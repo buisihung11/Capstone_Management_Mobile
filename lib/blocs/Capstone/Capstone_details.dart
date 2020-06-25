@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
+import 'package:flutter_login_demo/models/capstone.dart';
 
 class CapstonesDetails extends StatefulWidget {
   @override
@@ -6,11 +8,7 @@ class CapstonesDetails extends StatefulWidget {
 }
 
 class _CapstonesDetails extends State<CapstonesDetails> {
-  List chapters = ['Tam', 'Hung'];
-
-  List topics = ['SE62752', 'SE66662'];
-
-  List major = ['SE', 'SE'];
+  List<Capstone> capstoneList = []; // List for capstone
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Capstone Name'.toUpperCase(),
+              'Capstone Management program |'.toUpperCase(),
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -38,22 +36,53 @@ class _CapstonesDetails extends State<CapstonesDetails> {
               spacing: 4.0,
               children: <Widget>[
                 Text(
-                  'Lecturer'.toUpperCase(),
+                  'Made by: '.toUpperCase(),
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                chip('Hung', Color(0xFFff8a65)),
-                Text(
-                  'Student'.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                chip('Tam', Color(0xFFff8a65)),
-                chip('Bui Hung', Color(0xFFff8a65)),
+                chip('Tam', Color(0xFFff8a65), 'assets/FPT.png'),
+                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      children: <Widget>[
+                        DataTable(
+                          columns: [
+                            DataColumn(label: Text('Name')),
+                            DataColumn(label: Text('Phase 1')),
+                            DataColumn(label: Text('Phase 2')),
+                            DataColumn(label: Text('Bao ve lan 1')),
+                            DataColumn(label: Text('Bao ve lan 2')),
+                            DataColumn(label: Text('Final result')),
+                          ],
+                          rows: [
+                            DataRow(cells: [
+                              DataCell(Text('Tam')),
+                              DataCell(Text('10')),
+                              DataCell(Text('5')),
+                              DataCell(Text('lan 1')),
+                              DataCell(Text('lan 2')),
+                              DataCell(Text('Final')),
+                            ]),
+                            DataRow(cells: [
+                              DataCell(Text('Hung')),
+                              DataCell(Text('10')),
+                              DataCell(Text('10')),
+                              DataCell(Text('lan 1')),
+                              DataCell(Text('lan 2')),
+                              DataCell(Text('Final')),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    )),
               ],
             ),
           ],
@@ -72,12 +101,12 @@ class _CapstonesDetails extends State<CapstonesDetails> {
     );
   }
 
-  Widget chip(String label, Color color) {
+  Widget chip(String label, Color color, String imageLink) {
     return Chip(
       labelPadding: EdgeInsets.all(5.0),
       avatar: CircleAvatar(
         backgroundColor: Colors.grey.shade600,
-        child: Text(label[0].toUpperCase()),
+        child: Image.asset('$imageLink'),
       ),
       label: Text(
         label,

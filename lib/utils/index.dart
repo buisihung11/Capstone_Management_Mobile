@@ -8,6 +8,11 @@ Future<bool> setFCMToken(String value) async {
   return prefs.setString('FCMToken', value);
 }
 
+Future<String> getFCMToken() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('FCMToken');
+}
+
 Future<bool> setToken(String value) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.setString('token', value);

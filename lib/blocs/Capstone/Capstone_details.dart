@@ -3,6 +3,12 @@ import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
 
 class CapstonesDetails extends StatefulWidget {
+  final int capstoneId;
+  final int currentPhase;
+
+  const CapstonesDetails(
+      {Key key, @required this.capstoneId, this.currentPhase})
+      : super(key: key);
   @override
   _CapstonesDetails createState() => _CapstonesDetails();
 }
@@ -25,6 +31,9 @@ class _CapstonesDetails extends State<CapstonesDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+              "ID: ${widget.capstoneId.toString()} \n ${widget.currentPhase}",
+            ),
             Text(
               'Capstone Management program |'.toUpperCase(),
               style: TextStyle(

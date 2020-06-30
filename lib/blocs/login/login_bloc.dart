@@ -29,6 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         Response res =
             await userRepository.loginWithServer(firebaseToken.token);
 
+        print("Login with server Res: " + res.data.toString());
         if (res.statusCode == 200) {
           if (res.data["success"]) {
             String jwtToken = res.data["data"]["token"];

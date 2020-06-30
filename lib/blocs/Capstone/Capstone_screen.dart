@@ -34,9 +34,14 @@ class CapstoneScreenState extends State<CapstoneScreen> {
   void OnTap(Capstone item) {
     print(item);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CapstonesDetails(selectedCaspstone: item)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => CapstonesDetails(
+          capstoneId: item.id,
+          selectedCaspstone: item,
+        ),
+      ),
+    );
   }
 
   @override
@@ -46,11 +51,11 @@ class CapstoneScreenState extends State<CapstoneScreen> {
 
   Widget _getItem(Capstone capstone) {
     return ListTile(
-        title: Text(capstone.name ?? capstone.name ?? "DEfault name"),
-        subtitle: Text(capstone.mentorName ?? "DEfault mentorname"),
-        trailing:
-            Text(dateFormat.format(dateFormat.parse(capstone.dateCreate))),
-        onTap: () => OnTap(capstone));
+      title: Text(capstone.name ?? capstone.name ?? "DEfault name"),
+      subtitle: Text(capstone.mentorName ?? "DEfault mentorname"),
+      trailing: Text(dateFormat.format(dateFormat.parse(capstone.dateCreate))),
+      onTap: () => OnTap(capstone),
+    );
   }
 
   Future<void> _refreshCapstoneList() async {

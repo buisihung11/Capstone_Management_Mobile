@@ -8,6 +8,8 @@ abstract class AuthenticationState extends Equatable {
 
   @override
   List<Object> get props => (propss ?? []);
+
+  get errorMessage => null;
 }
 
 /// UnInitialized

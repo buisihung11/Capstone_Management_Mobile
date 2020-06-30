@@ -6,6 +6,8 @@ import 'package:flutter_login_demo/blocs/authentication/index.dart';
 import 'package:flutter_login_demo/models/user.dart';
 import 'package:flutter_login_demo/repositories/user_repository.dart';
 
+import '../../utils/index.dart';
+
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({@required UserRepository userRepository})
@@ -32,18 +34,28 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
-    final _isSignnedIn = await _userRepository.isSignedIn();
-    if (_isSignnedIn) {
-      final res = await _userRepository.getUser();
-      yield AuthenticatedState(User.fromJSON(res.data));
-    } else {
-      yield UnAuthenticationState();
+    try {
+      final _isSignnedIn = await _userRepository.isSignedIn();
+      if (_isSignnedIn) {
+        final res = await _userRepository.getUser();
+        // send FCM Token to server
+        final fcmToken = await getFCMToken();
+        final resSaveToken = await _userRepository.saveFCMToken(fcmToken);
+        yield AuthenticatedState(User.fromJSON(res.data));
+      } else {
+        yield UnAuthenticationState();
+      }
+    } catch (e) {
+      yield ErrorAuthenticationState(e.toString());
     }
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     try {
       final res = await _userRepository.getUser();
+      // send FCM Token to server
+      final fcmToken = await getFCMToken();
+      final resSaveToken = await _userRepository.saveFCMToken(fcmToken);
       yield AuthenticatedState(User.fromJSON(res.data));
     } catch (e) {
       yield ErrorAuthenticationState(e.toString());

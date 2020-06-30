@@ -8,7 +8,14 @@ import 'package:dio/dio.dart';
 class CapstonesDetails extends StatefulWidget {
   final Capstone selectedCaspstone;
 
-  CapstonesDetails({Key key, @required this.selectedCaspstone})
+  final int capstoneId;
+  final int currentPhase;
+
+  const CapstonesDetails(
+      {Key key,
+      @required this.capstoneId,
+      this.currentPhase,
+      this.selectedCaspstone})
       : super(key: key);
   @override
   _CapstonesDetails createState() => _CapstonesDetails();
@@ -52,9 +59,13 @@ class _CapstonesDetails extends State<CapstonesDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(capstoneDetail.name +
+                '\n------------------------------------------'),
             Text(
-              capstoneDetail.name +
-                  '\n------------------------------------------',
+              "ID: ${widget.capstoneId.toString()} \n ${widget.currentPhase}",
+            ),
+            Text(
+              'Capstone Management program |'.toUpperCase(),
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,

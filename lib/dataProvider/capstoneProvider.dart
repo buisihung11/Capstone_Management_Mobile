@@ -14,6 +14,8 @@ class CapstoneApiClient {
       // decode
       // convert to model
       final List content = response.data["content"];
+      print('This is content:\n');
+      print(content);
       final List<Capstone> result = new List();
       for (dynamic capstone in content) {
         result.add(Capstone.fromJson(capstone));

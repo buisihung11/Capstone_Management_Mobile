@@ -31,6 +31,17 @@ class CapstoneScreenState extends State<CapstoneScreen> {
     _load();
   }
 
+  void _onTap(Capstone item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CapstonesDetails(
+          capstoneId: item.id,
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -41,16 +52,7 @@ class CapstoneScreenState extends State<CapstoneScreen> {
       title: Text(capstone.name ?? capstone.name ?? "DEfault name"),
       subtitle: Text(capstone.mentorName ?? "DEfault mentorname"),
       trailing: Text(dateFormat.format(dateFormat.parse(capstone.dateCreate))),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CapstonesDetails(
-              capstoneId: capstone.id,
-            ),
-          ),
-        );
-      },
+      onTap: () => _onTap(capstone),
     );
   }
 

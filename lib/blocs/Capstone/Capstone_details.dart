@@ -1,15 +1,42 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
+import 'package:flutter_login_demo/utils/index.dart';
+import 'package:dio/dio.dart';
 
 class CapstonesDetails extends StatefulWidget {
+  final Capstone selectedCaspstone;
+
+  CapstonesDetails({Key key, @required this.selectedCaspstone})
+      : super(key: key);
   @override
   _CapstonesDetails createState() => _CapstonesDetails();
 }
 
 class _CapstonesDetails extends State<CapstonesDetails> {
-  List<Capstone> capstoneList = []; // List for capstone
+  Capstone capstoneDetail;
+  fetchData() async {
+    final response =
+        await request.get('/capstones/${widget.selectedCaspstone.id}');
 
+    print('this is castone detail');
+    print(response.data);
+
+    setState(() {
+      capstoneDetail = Capstone.fromJson(response.data);
+    });
+
+    print(capstoneDetail);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+//-------------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +53,8 @@ class _CapstonesDetails extends State<CapstonesDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Capstone Management program |'.toUpperCase(),
+              capstoneDetail.name +
+                  '\n------------------------------------------',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -36,16 +64,13 @@ class _CapstonesDetails extends State<CapstonesDetails> {
               spacing: 4.0,
               children: <Widget>[
                 Text(
-                  'Made by: '.toUpperCase(),
+                  '\nMade by: '.toUpperCase(),
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 chip('Tam', Color(0xFFff8a65), 'assets/FPT.png'),
-                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
-                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
-                chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
                 chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
                 chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
                 chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),

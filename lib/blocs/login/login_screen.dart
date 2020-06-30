@@ -34,6 +34,8 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: close_sinks
+    final authenBloc = BlocProvider.of<AuthenticationBloc>(context);
     return BlocListener<LoginBloc, LoginState>(
       listener: (BuildContext context, LoginState state) {
         if (state is LoginSuccessState) {
@@ -67,6 +69,14 @@ class LoginForm extends StatelessWidget {
                       if (state is ErrorLoginState)
                         Text(
                           'Login err: ${state.errorMessage}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                      if (authenBloc.state is ErrorAuthenticationState)
+                        Text(
+                          'Login err: ${authenBloc.state.errorMessage}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.redAccent,

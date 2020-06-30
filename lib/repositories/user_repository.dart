@@ -92,4 +92,13 @@ class UserRepository {
       },
     );
   }
+
+  Future<dynamic> saveFCMToken(fcmToken) {
+    return request.post(
+      "/users/tokens",
+      data: {
+        "fcmToken": fcmToken,
+      },
+    );
+  }
 }

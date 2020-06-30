@@ -45,7 +45,9 @@ class CapstoneScreenState extends State<CapstoneScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CapstonesDetails(),
+            builder: (context) => CapstonesDetails(
+              capstoneId: capstone.id,
+            ),
           ),
         );
       },

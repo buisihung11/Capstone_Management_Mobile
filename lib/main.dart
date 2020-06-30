@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login_demo/blocs/Capstone/Capstone_details.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
 import 'package:flutter_login_demo/blocs/login/index.dart';
 import 'package:flutter_login_demo/dataProvider/capstoneProvider.dart';
@@ -52,6 +53,26 @@ class _AppState extends State<App> {
 
   String msg;
 
+  void _navigateToCapstoneDetail(Map<String, dynamic> message) {
+    var data = message['data'] ?? message;
+    // Clear away dialogs
+    Navigator.popUntil(context, (Route<dynamic> route) => route is PageRoute);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CapstonesDetails(
+          capstoneId: int.parse(data['capstoneId'].toString()),
+          currentPhase: int.parse(data['phaseId'].toString()),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleNotification(Map<dynamic, dynamic> message) async {
+    var data = message['data'] ?? message;
+    print(data.toString());
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,23 +80,17 @@ class _AppState extends State<App> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessagea: $message");
-        // final snackbar = SnackBar(
-        //   content: Text("Receive message"),
-        //   action: SnackBarAction(
-        //     label: 'Go',
-        //     onPressed: () => null,
-        //   ),
-        // );
-        // print("After show");
-        // Scaffold.of(context).showSnackBar(snackbar);
         _showItemDialog(message);
+        _handleNotification(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        _navigateToCapstoneDetail(message);
         // TODO optional
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
+        _navigateToCapstoneDetail(message);
         // TODO optional
       },
     );
@@ -83,16 +98,27 @@ class _AppState extends State<App> {
 
   Widget _buildDialog(BuildContext context, String msg) {
     return AlertDialog(
-      content: Text(msg),
+      content: Text(
+        "Do you want to navigate to that?",
+        style: TextStyle(
+          color: Colors.grey[400],
+        ),
+      ),
+      title: Text(msg),
       actions: <Widget>[
         FlatButton(
-          child: const Text('CLOSE'),
+          child: const Text(
+            'No',
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
           onPressed: () {
             Navigator.pop(context, false);
           },
         ),
         FlatButton(
-          child: const Text('SHOW'),
+          child: const Text('Yes'),
           onPressed: () {
             Navigator.pop(context, true);
           },
@@ -101,12 +127,13 @@ class _AppState extends State<App> {
     );
   }
 
-  void _showItemDialog(Map<String, dynamic> message) {
+  void _showItemDialog(Map<String, dynamic> message) async {
     print('Showing Dialog');
-    showDialog<bool>(
+    bool isConfirmToNavigate = await showDialog<bool>(
         context: context,
         builder: (context) =>
             _buildDialog(context, message['notification']['title']));
+    if (isConfirmToNavigate) _navigateToCapstoneDetail(message);
   }
 
   @override
@@ -133,26 +160,11 @@ class _AppState extends State<App> {
   }
 
   _saveDeviceToken() async {
-    print('SaveToken');
-
     // Get the token for this device
     String fcmToken = await _fcm.getToken();
-
     // Save it to local
-    setFCMToken(fcmToken);
     if (fcmToken != null) {
-      // var tokens = _db
-      //     .collection('users')
-      //     .document(uid)
-      //     .collection('tokens')
-      //     .document(fcmToken);
-
-      // await tokens.setData({
-      //   'token': fcmToken,
-      //   'createdAt': FieldValue.serverTimestamp(), // optional
-      //   'platform': Platform.operatingSystem // optional
-      // });
-
+      setFCMToken(fcmToken);
     }
   }
 }

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
 import 'package:flutter_login_demo/utils/index.dart';
+import 'package:flutter_login_demo/models/student.dart';
 
 class CapstonesDetails extends StatefulWidget {
   final int capstoneId;
@@ -17,17 +20,37 @@ class CapstonesDetails extends StatefulWidget {
 
 class _CapstonesDetails extends State<CapstonesDetails> {
   Capstone capstoneDetail;
+  Student studentList;
+  List<Student> results = [];
   fetchData() async {
     final response = await request.get('/capstones/${widget.capstoneId}');
-
     print('this is castone detail');
     print(response.data);
+    //---------------------------------------
+    List<Student> listOfStudent = response.data["listStudent"];
 
+    results = listOfStudent;
+    print('this is result');
+    print(results);
+    print('This is length');
+    print('${results.length}');
     setState(() {
       capstoneDetail = Capstone.fromJson(response.data);
     });
 
     print(capstoneDetail);
+  }
+
+  DataRow _getDataRow(result) {
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(Text('test')),
+        DataCell(Text('123')),
+        DataCell(Text('123')),
+        DataCell(Text('123')),
+        DataCell(Text('123')),
+      ],
+    );
   }
 
   @override
@@ -61,13 +84,6 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                   Text(
                     "ID: ${widget.capstoneId.toString()} \n ${widget.currentPhase}",
                   ),
-                  Text(
-                    'Capstone Management program |'.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Wrap(
                     spacing: 4.0,
                     children: <Widget>[
@@ -89,30 +105,35 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                               DataTable(
                                 columns: [
                                   DataColumn(label: Text('Name')),
-                                  DataColumn(label: Text('Phase 1')),
-                                  DataColumn(label: Text('Phase 2')),
-                                  DataColumn(label: Text('Bao ve lan 1')),
-                                  DataColumn(label: Text('Bao ve lan 2')),
+                                  DataColumn(label: Text('Team Work')),
+                                  DataColumn(label: Text('Work with Mentor')),
+                                  DataColumn(label: Text('Group Lecture')),
                                   DataColumn(label: Text('Final result')),
                                 ],
-                                rows: [
-                                  DataRow(cells: [
-                                    DataCell(Text('Tam')),
-                                    DataCell(Text('10')),
-                                    DataCell(Text('5')),
-                                    DataCell(Text('lan 1')),
-                                    DataCell(Text('lan 2')),
-                                    DataCell(Text('Final')),
-                                  ]),
-                                  DataRow(cells: [
-                                    DataCell(Text('Hung')),
-                                    DataCell(Text('10')),
-                                    DataCell(Text('10')),
-                                    DataCell(Text('lan 1')),
-                                    DataCell(Text('lan 2')),
-                                    DataCell(Text('Final')),
-                                  ]),
-                                ],
+                                // rows: List.generate(results.length,
+                                //     (index) => _getDataRow(results[index])
+                                //     )
+                                rows: results
+                                    .map(
+                                      (e) => DataRow(cells: [
+                                        DataCell(
+                                          Text('name'),
+                                        ),
+                                        DataCell(
+                                          Text('123'),
+                                        ),
+                                        DataCell(
+                                          Text('123'),
+                                        ),
+                                        DataCell(
+                                          Text('123'),
+                                        ),
+                                        DataCell(
+                                          Text('123'),
+                                        ),
+                                      ]),
+                                    )
+                                    .toList(),
                               ),
                             ],
                           )),

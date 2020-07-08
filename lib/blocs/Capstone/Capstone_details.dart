@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
 import 'package:flutter_login_demo/utils/index.dart';
-import 'package:flutter_login_demo/models/student.dart';
 
 class CapstonesDetails extends StatefulWidget {
   final int capstoneId;
@@ -20,16 +19,15 @@ class CapstonesDetails extends StatefulWidget {
 
 class _CapstonesDetails extends State<CapstonesDetails> {
   Capstone capstoneDetail;
-  Student studentList;
-  List<Student> results = [];
+  List results = [];
+
   fetchData() async {
     final response = await request.get('/capstones/${widget.capstoneId}');
     print('this is castone detail');
     print(response.data);
     //---------------------------------------
-    List<Student> listOfStudent = response.data["listStudent"];
+    results = response.data["listStudent"];
 
-    results = listOfStudent;
     print('this is result');
     print(results);
     print('This is length');
@@ -39,18 +37,6 @@ class _CapstonesDetails extends State<CapstonesDetails> {
     });
 
     print(capstoneDetail);
-  }
-
-  DataRow _getDataRow(result) {
-    return DataRow(
-      cells: <DataCell>[
-        DataCell(Text('test')),
-        DataCell(Text('123')),
-        DataCell(Text('123')),
-        DataCell(Text('123')),
-        DataCell(Text('123')),
-      ],
-    );
   }
 
   @override
@@ -94,10 +80,8 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      chip('Tam', Color(0xFFff8a65), 'assets/FPT.png'),
-                      chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
-                      chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
-                      chip('Loi', Color(0xFFff8a65), 'assets/FPT.png'),
+                      for (var student in results)
+                        chip(student["name"], 'assets/FPT.png'),
                       SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Column(
@@ -110,14 +94,11 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                                   DataColumn(label: Text('Group Lecture')),
                                   DataColumn(label: Text('Final result')),
                                 ],
-                                // rows: List.generate(results.length,
-                                //     (index) => _getDataRow(results[index])
-                                //     )
                                 rows: results
                                     .map(
                                       (e) => DataRow(cells: [
                                         DataCell(
-                                          Text('name'),
+                                          Text(e["name"]),
                                         ),
                                         DataCell(
                                           Text('123'),
@@ -155,7 +136,7 @@ class _CapstonesDetails extends State<CapstonesDetails> {
     );
   }
 
-  Widget chip(String label, Color color, String imageLink) {
+  Widget chip(var label, String imageLink) {
     return Chip(
       labelPadding: EdgeInsets.all(5.0),
       avatar: CircleAvatar(
@@ -165,10 +146,9 @@ class _CapstonesDetails extends State<CapstonesDetails> {
       label: Text(
         label,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
-      backgroundColor: color,
       elevation: 6.0,
       shadowColor: Colors.grey[60],
       padding: EdgeInsets.all(6.0),

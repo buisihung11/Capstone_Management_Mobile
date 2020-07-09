@@ -19,8 +19,8 @@ class Capstone {
         id: json["capstoneId"],
         name: json["name"],
         mentorName: json["mentor"]["name"],
-        currentPhase: json["dateCreate"],
-        dateCreate: json["dateCreate"],
+        currentPhase: json["dateCreated"],
+        dateCreate: json["dateCreated"],
       );
 
   Map<String, dynamic> toJson() => {

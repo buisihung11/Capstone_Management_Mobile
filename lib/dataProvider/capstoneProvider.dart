@@ -5,9 +5,10 @@ import 'package:flutter_login_demo/utils/index.dart';
 class CapstoneApiClient {
   CapstoneApiClient();
 
-  Future<List<Capstone>> getCapstoneList() async {
+  Future<Map<String, dynamic>> getCapstoneList([int page = 0]) async {
     // get response
-    final response = await request.get('/capstones');
+    final response = await request
+        .get('/capstones', queryParameters: {"page": page, "size": 10});
 
     print(response);
     if (response.statusCode == 200) {
@@ -20,7 +21,7 @@ class CapstoneApiClient {
       for (dynamic capstone in content) {
         result.add(Capstone.fromJson(capstone));
       }
-      return result;
+      return {"result": result, "totalPage": response.data["totalPage"]};
     } else {
       throw Exception('Failed to load capstone');
     }

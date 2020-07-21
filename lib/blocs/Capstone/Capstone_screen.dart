@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_demo/blocs/Capstone/Capstone_details.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
-import 'package:flutter_login_demo/screens/test.dart';
 import 'package:intl/intl.dart';
+import 'package:loadmore/loadmore.dart';
 
 class CapstoneScreen extends StatefulWidget {
   const CapstoneScreen({
@@ -20,6 +20,7 @@ class CapstoneScreen extends StatefulWidget {
 }
 
 class CapstoneScreenState extends State<CapstoneScreen> {
+  int page = 0;
   Completer<void> _refreshCompleter;
   GlobalKey<RefreshIndicatorState> _refreshKey;
   DateFormat dateFormat = DateFormat("dd-MM-yyyy");
@@ -65,8 +66,17 @@ class CapstoneScreenState extends State<CapstoneScreen> {
   }
 
   Future<void> _refreshCapstoneList() async {
+    setState(() => page = 0);
     BlocProvider.of<CapstoneBloc>(context).add(CapstoneRefreshRequest());
     return _refreshCompleter.future;
+  }
+
+  Future<void> _loadMore() {
+    BlocProvider.of<CapstoneBloc>(context)
+        .add(CapstoneLoadMoreRequest(page + 1));
+    setState(() {
+      page += 1;
+    });
   }
 
   @override
@@ -131,11 +141,17 @@ class CapstoneScreenState extends State<CapstoneScreen> {
                     ],
                   ),
                 ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                      "Loaded ${(currentState as CapstoneLoadSuccess)?.result?.length ?? '1'}"),
+                ),
+                Divider(),
                 (currentState is CapstoneInitialState ||
                         currentState is CapstoneLoadInProgressState)
                     ? Center(child: CircularProgressIndicator())
                     : Container(
-                        height: MediaQuery.of(context).size.height,
+                        height: 500,
                         child: (currentState as CapstoneLoadSuccess)
                                     .result
                                     .length ==
@@ -146,20 +162,33 @@ class CapstoneScreenState extends State<CapstoneScreen> {
                             : RefreshIndicator(
                                 key: _refreshKey,
                                 onRefresh: _refreshCapstoneList,
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return _getItem(
+                                child: LoadMore(
+                                  textBuilder: (LoadMoreStatus status) {
+                                    if (status == LoadMoreStatus.loading)
+                                      return "Loading..";
+                                    else
+                                      return "You got the end";
+                                  },
+                                  child: ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      return _getItem(
+                                          (currentState as CapstoneLoadSuccess)
+                                              .result[index]);
+                                    },
+                                    itemCount:
                                         (currentState as CapstoneLoadSuccess)
-                                            .result[index]);
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return Divider(height: 16);
-                                  },
-                                  itemCount:
+                                            .result
+                                            .length,
+                                  ),
+                                  isFinish:
                                       (currentState as CapstoneLoadSuccess)
-                                          .result
-                                          .length,
+                                              .totalPage ==
+                                          page,
+                                  onLoadMore: () async {
+                                    await Future.delayed(Duration(seconds: 2));
+                                    _loadMore();
+                                    return true;
+                                  },
                                 ),
                               ),
                       ),
@@ -172,6 +201,9 @@ class CapstoneScreenState extends State<CapstoneScreen> {
   }
 
   void _load() {
+    setState(() {
+      page = 0;
+    });
     BlocProvider.of<CapstoneBloc>(context).add(CapstoneRequest());
   }
 }

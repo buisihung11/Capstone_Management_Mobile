@@ -20,7 +20,7 @@ class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
       if (event is CapstoneRequest) {
         yield CapstoneLoadInProgressState();
         final result = await capstoneRepository.getCapstoneList();
-        yield CapstoneLoadSuccess(result);
+        yield CapstoneLoadSuccess(result["result"]);
       }
       if (event is CapstoneRequestFilter) {
         yield CapstoneLoadInProgressState();
@@ -30,7 +30,16 @@ class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
       }
       if (event is CapstoneRefreshRequest) {
         final result = await capstoneRepository.getCapstoneList();
-        yield CapstoneLoadSuccess(result);
+        yield CapstoneLoadSuccess(result["result"]);
+      }
+      if (event is CapstoneLoadMoreRequest) {
+        var originList = [];
+        if (state is CapstoneLoadSuccess) {
+          originList = (state as CapstoneLoadSuccess).result;
+        }
+        final result = await capstoneRepository.getCapstoneList(event.page);
+        originList.addAll(result["result"]);
+        yield CapstoneLoadSuccess(originList, result["totalPage"]);
       }
     } catch (err) {
       print(err);

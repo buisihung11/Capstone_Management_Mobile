@@ -9,6 +9,12 @@ class CapstoneRequest extends CapstoneEvent {}
 
 class CapstoneRefreshRequest extends CapstoneEvent {}
 
+class CapstoneLoadMoreRequest extends CapstoneEvent {
+  final int page;
+
+  CapstoneLoadMoreRequest(this.page);
+}
+
 class CapstoneRequestFilter extends CapstoneEvent {
   final String name;
 

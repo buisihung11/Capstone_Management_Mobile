@@ -17,8 +17,10 @@ class CapstoneLoadInProgressState extends CapstoneState {}
 /// Initialized
 class CapstoneLoadSuccess extends CapstoneState {
   final List<Capstone> result;
+  final int totalPage;
 
-  CapstoneLoadSuccess(this.result) : super([result]);
+  CapstoneLoadSuccess(this.result, [this.totalPage])
+      : super([result, totalPage]);
 }
 
 class CapstoneFailureState extends CapstoneState {

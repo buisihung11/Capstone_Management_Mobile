@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_login_demo/blocs/score/score_screen.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
 import 'package:flutter_login_demo/models/phase.dart';
 import 'package:flutter_login_demo/utils/index.dart';
-
-import 'Capstone_phases.dart';
 
 class CapstonesDetails extends StatefulWidget {
   final int capstoneId;
@@ -35,19 +31,12 @@ class _CapstonesDetails extends State<CapstonesDetails> {
     // phaseURL = '/capstones/${widget.capstoneId}/phases';
     final phaseResponse =
         await request.get('/capstones/${widget.capstoneId}/phases');
-    print('this is castone detail');
-    print(response.data);
     //---------------------------------------
     // results = response.data["students"];
-    print('this is phase');
     List<Phase> testPhase = Phase.fromMapToList(phaseResponse.data);
-    print(testPhase);
 
-    print(Capstone.fromJson(response.data));
     setState(() {
       capstoneDetail = Capstone.fromJson(response.data);
-    });
-    setState(() {
       phases = testPhase;
     });
   }
@@ -91,9 +80,6 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  Text(
-                    "ID: ${widget.capstoneId.toString()} \n ${widget.currentPhase}",
-                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -129,31 +115,46 @@ class _CapstonesDetails extends State<CapstonesDetails> {
                       ),
                       Container(
                         height: 250,
-                        child: ListView.separated(
-                          itemBuilder: (BuildContext context, int index) {
-                            return Material(
-                              color: Colors.red,
-                              child: Container(
-                                height: 50,
-                                child: InkWell(
-                                  onTap: () {
-                                    _onTap(phases[index]);
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    color: Colors.amber,
-                                    child: Center(
-                                        child:
-                                            Text('${phases[index].phaseName}')),
-                                  ),
-                                ),
+                        child: phases == null
+                            ? Text("Loading")
+                            : GridView.count(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                children: <Widget>[
+                                  ...phases
+                                      .map(
+                                        (e) => Material(
+                                          // color: Colors.red,
+                                          child: Container(
+                                            height: 50,
+                                            child: InkWell(
+                                              onTap: () {
+                                                _onTap(e);
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: Colors.amber,
+                                                ),
+                                                height: 50,
+                                                child: Center(
+                                                    child: Text(
+                                                  '${e.phaseName}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                  ),
+                                                )),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList()
+                                ],
                               ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                          itemCount: phases.length,
-                        ),
                       ),
                     ],
                   ),

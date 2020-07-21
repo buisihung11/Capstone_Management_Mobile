@@ -7,8 +7,8 @@ class CapstoneRepository {
 
   CapstoneRepository({@required this.capstoneApiClient});
 
-  Future<List<Capstone>> getCapstoneList() async {
-    final result = capstoneApiClient.getCapstoneList();
+  Future<Map<String, dynamic>> getCapstoneList([int page = 0]) async {
+    final result = await capstoneApiClient.getCapstoneList(page);
     return result;
   }
 

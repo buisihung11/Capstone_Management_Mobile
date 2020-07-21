@@ -20,14 +20,21 @@ dependencies:
   intl: ^0.16.1
   dio: ^3.0.9
   shared_preferences: ^0.5.7+3
+  # incrementally_loading_listview: ^0.3.0
+  loadmore: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
-
+  fonts:
+    - family: BalooDa2
+      fonts:
+        - asset: assets/fonts/Baloo_Da_2/BalooDa2-Regular.ttf
+        - asset: assets/fonts/Baloo_Da_2/BalooDa2-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Baloo_Da_2/BalooDa2-Medium.ttf
   assets:
     - assets/

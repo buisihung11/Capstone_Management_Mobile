@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "995136449647-8775ueu7lq0dlae8539mi2m6grrenjss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hunghcc.capstone",
+            "certificate_hash": "7e24c01fe9a4bf43a0430ce7eee9d135281d21de"
+          }
+        },
+        {
           "client_id": "995136449647-v3prbbb6qchhg5bgiaetom7m7tj3lpiq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

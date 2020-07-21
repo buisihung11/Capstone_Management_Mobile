@@ -23,6 +23,7 @@ void main() {
           AuthenticationBloc(userRepository: userRepository)..add(AppStarted()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(fontFamily: 'BalooDa2'),
         home: App(
           userRepository: userRepository,
         ),
@@ -142,7 +143,10 @@ class _AppState extends State<App> {
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is InAuthenticationState) {
-            return SplashScreen();
+            return Scaffold(
+                body: Center(
+              child: Text(state.hello),
+            ));
           } else if (state is AuthenticatedState) {
             return CapstonePage(
               user: state.user,
@@ -153,6 +157,7 @@ class _AppState extends State<App> {
             return LoginScreen(
                 userRepository: widget._userRepository, msg: msg);
           }
+          print(state);
           return SplashScreen();
         },
       ),

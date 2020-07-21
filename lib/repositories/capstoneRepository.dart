@@ -11,4 +11,9 @@ class CapstoneRepository {
     final result = capstoneApiClient.getCapstoneList();
     return result;
   }
+
+  Future<List<Capstone>> getCapstoneListWithFilter(String name) async {
+    final result = capstoneApiClient.getCapstoneListWithFilter(name);
+    return result;
+  }
 }

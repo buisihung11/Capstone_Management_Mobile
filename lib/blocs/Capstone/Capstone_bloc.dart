@@ -22,13 +22,19 @@ class CapstoneBloc extends Bloc<CapstoneEvent, CapstoneState> {
         final result = await capstoneRepository.getCapstoneList();
         yield CapstoneLoadSuccess(result);
       }
+      if (event is CapstoneRequestFilter) {
+        yield CapstoneLoadInProgressState();
+        final result =
+            await capstoneRepository.getCapstoneListWithFilter(event.name);
+        yield CapstoneLoadSuccess(result);
+      }
       if (event is CapstoneRefreshRequest) {
         final result = await capstoneRepository.getCapstoneList();
         yield CapstoneLoadSuccess(result);
       }
     } catch (err) {
       print(err);
-      yield CapstoneFailureState();
+      yield CapstoneFailureState(errorMessage: err.toString());
       print("error at capstone bloc");
     }
   }

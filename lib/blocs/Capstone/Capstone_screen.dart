@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_demo/blocs/Capstone/Capstone_details.dart';
 import 'package:flutter_login_demo/blocs/Capstone/index.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
+import 'package:flutter_login_demo/screens/test.dart';
 import 'package:intl/intl.dart';
 
 class CapstoneScreen extends StatefulWidget {
@@ -22,7 +23,8 @@ class CapstoneScreenState extends State<CapstoneScreen> {
   Completer<void> _refreshCompleter;
   GlobalKey<RefreshIndicatorState> _refreshKey;
   DateFormat dateFormat = DateFormat("dd-MM-yyyy");
-
+  // final _formKey = GlobalKey<FormState>();
+  final myController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -32,6 +34,12 @@ class CapstoneScreenState extends State<CapstoneScreen> {
   }
 
   void _onTap(Capstone item) {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => TestScreeb(),
+    //   ),
+    // );
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -74,12 +82,6 @@ class CapstoneScreenState extends State<CapstoneScreen> {
         BuildContext context,
         CapstoneState currentState,
       ) {
-        if (currentState is CapstoneInitialState ||
-            currentState is CapstoneLoadInProgressState) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
         if (currentState is CapstoneFailureState) {
           return Center(
               child: Column(
@@ -96,9 +98,7 @@ class CapstoneScreenState extends State<CapstoneScreen> {
               ),
             ],
           ));
-        }
-        if (currentState is CapstoneLoadSuccess) {
-          print(currentState);
+        } else {
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -107,32 +107,66 @@ class CapstoneScreenState extends State<CapstoneScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: RefreshIndicator(
-                    key: _refreshKey,
-                    onRefresh: _refreshCapstoneList,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return _getItem(currentState.result[index]);
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider(height: 16);
-                      },
-                      itemCount: currentState.result.length,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextFormField(
+                          controller: myController,
+                          decoration: const InputDecoration(
+                            labelText: 'Search by Name',
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            // print(myController.text);
+                            BlocProvider.of<CapstoneBloc>(context).add(
+                                CapstoneRequestFilter(name: myController.text));
+                          }),
+                    ],
                   ),
                 ),
+                (currentState is CapstoneInitialState ||
+                        currentState is CapstoneLoadInProgressState)
+                    ? Center(child: CircularProgressIndicator())
+                    : Container(
+                        height: MediaQuery.of(context).size.height,
+                        child: (currentState as CapstoneLoadSuccess)
+                                    .result
+                                    .length ==
+                                0
+                            ? Center(
+                                child: Text("No capstone with that name"),
+                              )
+                            : RefreshIndicator(
+                                key: _refreshKey,
+                                onRefresh: _refreshCapstoneList,
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return _getItem(
+                                        (currentState as CapstoneLoadSuccess)
+                                            .result[index]);
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return Divider(height: 16);
+                                  },
+                                  itemCount:
+                                      (currentState as CapstoneLoadSuccess)
+                                          .result
+                                          .length,
+                                ),
+                              ),
+                      ),
               ],
             ),
           );
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
       },
     );
   }

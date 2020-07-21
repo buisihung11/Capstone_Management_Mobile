@@ -1,13 +1,27 @@
 import 'dart:convert';
 
+class Student {
+  final String name;
+  final String studentId;
+
+  Student({this.name, this.studentId});
+
+  factory Student.fromMap(Map<String, dynamic> map) => Student(
+        name: map["name"],
+        studentId: map["studentId"],
+      );
+}
+
 class Capstone {
   final int id;
   final String name;
   final String mentorName;
   final String currentPhase;
   final String dateCreate;
+  final List<Student> students;
 
   Capstone({
+    this.students,
     this.id,
     this.name,
     this.mentorName,
@@ -21,6 +35,10 @@ class Capstone {
         mentorName: json["mentor"]["name"],
         currentPhase: json["dateCreated"],
         dateCreate: json["dateCreated"],
+        students: json["students"] != null
+            ? List<Student>.from(
+                json["students"].map((student) => Student.fromMap(student)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {

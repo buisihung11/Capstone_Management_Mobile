@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login_demo/blocs/score/score_screen.dart';
 import 'package:flutter_login_demo/models/capstone.dart';
+import 'package:flutter_login_demo/models/phase.dart';
 import 'package:flutter_login_demo/utils/index.dart';
 
 import 'Capstone_phases.dart';
@@ -23,39 +25,31 @@ class _CapstonesDetails extends State<CapstonesDetails> {
   Capstone capstoneDetail;
   String phaseURL;
   List results = [];
-  List phases = [];
+
+  List<Phase> phases;
+
   List selectedPhase;
   var season;
   fetchData() async {
     final response = await request.get('/capstones/${widget.capstoneId}');
-    phaseURL = '/capstones/${widget.capstoneId}/phases';
-    final phaseResponse = await request.get(phaseURL);
+    // phaseURL = '/capstones/${widget.capstoneId}/phases';
+    final phaseResponse =
+        await request.get('/capstones/${widget.capstoneId}/phases');
     print('this is castone detail');
     print(response.data);
     //---------------------------------------
-    results = response.data["students"];
-    print('this is result');
-    print(results);
-    print('This is length');
-    print('${results.length}');
-    //----------------------------------------
+    // results = response.data["students"];
     print('this is phase');
-    phases = phaseResponse.data;
-    print(phases);
-    int length = phases.length;
-    phases = [];
-    for (int i = 0; i < length; i++) {
-      phases.add(phaseResponse.data[i]["phaseName"]);
-    }
+    List<Phase> testPhase = Phase.fromMapToList(phaseResponse.data);
+    print(testPhase);
 
-    print(selectedPhase);
-    //this is season
-    season = response.data["season"]["name"];
+    print(Capstone.fromJson(response.data));
     setState(() {
       capstoneDetail = Capstone.fromJson(response.data);
     });
-
-    print(capstoneDetail);
+    setState(() {
+      phases = testPhase;
+    });
   }
 
   @override
@@ -70,118 +64,130 @@ class _CapstonesDetails extends State<CapstonesDetails> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Capstone detail', style: TextStyle(color: Colors.black)),
+        title: Text('Capstone detail', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.orange,
+        centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
       ),
       body: capstoneDetail == null
           ? Center(
-              child: Text("Loading capstoneDetail"),
+              child: Text("Loading capstoneDetail",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  )),
             )
           : Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(capstoneDetail.name +
-                      '\n------------------------------------------'),
+                  Text(
+                    capstoneDetail.name,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                   Text(
                     "ID: ${widget.capstoneId.toString()} \n ${widget.currentPhase}",
                   ),
-                  Wrap(
-                    spacing: 4.0,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '\nMade by: '.toUpperCase(),
+                        '\nStudents: ',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      for (var student in results)
-                        chip(student["name"], 'assets/FPT.png'),
-                      SingleChildScrollView(
+                      SizedBox(
+                        height: 60,
+                        child: ListView(
                           scrollDirection: Axis.horizontal,
-                          child: Column(
-                            children: <Widget>[
-                              DataTable(
-                                columns: [
-                                  DataColumn(label: Text('Phase Name')),
-                                ],
-                                rows: phases
-                                    .map(
-                                      (e) => DataRow(cells: [
-                                        DataCell(
-                                          Text(
-                                            e,
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                                backgroundColor:
-                                                    Colors.amber[100]),
-                                          ),
-                                          onTap: () => _onTap(phaseURL, 1),
-                                        ),
-                                      ]),
-                                    )
-                                    .toList(),
+                          padding: EdgeInsets.all(10),
+                          children: <Widget>[
+                            for (var student in capstoneDetail.students)
+                              chip(
+                                Text(
+                                  student.name,
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                'assets/FPT.png',
                               ),
-                            ],
-                          )),
+                          ],
+                        ),
+                      ),
+                      Text('Phase List: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25)),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 250,
+                        child: ListView.separated(
+                          itemBuilder: (BuildContext context, int index) {
+                            return Material(
+                              color: Colors.red,
+                              child: Container(
+                                height: 50,
+                                child: InkWell(
+                                  onTap: () {
+                                    _onTap(phases[index]);
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    color: Colors.amber,
+                                    child: Center(
+                                        child:
+                                            Text('${phases[index].phaseName}')),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                          itemCount: phases.length,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: <Widget>[
-            season == null
-                ? Center(
-                    child: Text(""),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: Text(
-                      season,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-          ],
-        ),
-      ),
     );
   }
 
   Widget chip(var label, String imageLink) {
-    return Chip(
-      labelPadding: EdgeInsets.all(5.0),
-      avatar: CircleAvatar(
-        backgroundColor: Colors.grey.shade600,
-        child: Image.asset('$imageLink'),
-      ),
-      label: Text(
-        label,
-        style: TextStyle(
-          color: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Chip(
+        labelPadding: EdgeInsets.all(5),
+        avatar: CircleAvatar(
+          backgroundColor: Colors.grey,
+          child: Image.asset('$imageLink'),
         ),
+        label: label,
+        elevation: 3.0,
+        shadowColor: Colors.grey[60],
+        backgroundColor: Colors.blueAccent,
       ),
-      elevation: 6.0,
-      shadowColor: Colors.grey[60],
-      padding: EdgeInsets.all(6.0),
     );
   }
 
-  void _onTap(String phaseURL, int id) {
+  void _onTap(Phase tappedPhase) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PhaseDetails(
-          url: phaseURL,
-          id: id,
-        ),
-      ),
+          builder: (context) => PhaseScore(
+                capstone: capstoneDetail,
+                phase: tappedPhase,
+              )),
     );
   }
 }

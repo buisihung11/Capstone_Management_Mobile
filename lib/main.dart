@@ -53,7 +53,7 @@ class _AppState extends State<App> {
 
   String msg;
 
-  void _navigateToCapstoneDetail(Map<String, dynamic> message) {
+  void _navigateToPhaseScore(Map<String, dynamic> message) {
     var data = message['data'] ?? message;
     // Clear away dialogs
     Navigator.popUntil(context, (Route<dynamic> route) => route is PageRoute);
@@ -85,12 +85,12 @@ class _AppState extends State<App> {
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        _navigateToCapstoneDetail(message);
+        _navigateToPhaseScore(message);
         // TODO optional
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-        _navigateToCapstoneDetail(message);
+        _navigateToPhaseScore(message);
         // TODO optional
       },
     );
@@ -133,7 +133,7 @@ class _AppState extends State<App> {
         context: context,
         builder: (context) =>
             _buildDialog(context, message['notification']['title']));
-    if (isConfirmToNavigate) _navigateToCapstoneDetail(message);
+    if (isConfirmToNavigate) _navigateToPhaseScore(message);
   }
 
   @override
@@ -162,6 +162,7 @@ class _AppState extends State<App> {
   _saveDeviceToken() async {
     // Get the token for this device
     String fcmToken = await _fcm.getToken();
+    print("FCMTOKEN: $fcmToken");
     // Save it to local
     if (fcmToken != null) {
       setFCMToken(fcmToken);

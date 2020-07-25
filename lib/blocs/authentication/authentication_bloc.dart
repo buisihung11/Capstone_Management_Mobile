@@ -36,6 +36,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapAppStartedToState() async* {
     try {
       final _isSignnedIn = await _userRepository.isSignedIn();
+      print("LoggedIn $_isSignnedIn");
       if (_isSignnedIn) {
         final res = await _userRepository.getUser();
         // send FCM Token to server

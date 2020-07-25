@@ -143,55 +143,52 @@ class CapstoneScreenState extends State<CapstoneScreen> {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                      "Loaded ${(currentState as CapstoneLoadSuccess)?.result?.length ?? '1'}"),
+                  child: (currentState is CapstoneLoadSuccess)
+                      ? Text("Loaded ${(currentState)?.result?.length ?? '1'}")
+                      : Text("..."),
                 ),
                 Divider(),
                 (currentState is CapstoneInitialState ||
                         currentState is CapstoneLoadInProgressState)
                     ? Center(child: CircularProgressIndicator())
-                    : Container(
-                        height: 500,
-                        child: (currentState as CapstoneLoadSuccess)
-                                    .result
-                                    .length ==
-                                0
-                            ? Center(
-                                child: Text("No capstone with that name"),
-                              )
-                            : RefreshIndicator(
-                                key: _refreshKey,
-                                onRefresh: _refreshCapstoneList,
-                                child: LoadMore(
-                                  textBuilder: (LoadMoreStatus status) {
-                                    if (status == LoadMoreStatus.loading)
-                                      return "Loading..";
-                                    else
-                                      return "You got the end";
-                                  },
-                                  child: ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      return _getItem(
-                                          (currentState as CapstoneLoadSuccess)
-                                              .result[index]);
-                                    },
-                                    itemCount:
-                                        (currentState as CapstoneLoadSuccess)
-                                            .result
-                                            .length,
+                    : (currentState is CapstoneLoadSuccess)
+                        ? Container(
+                            height: 500,
+                            child: (currentState).result.length == 0
+                                ? Center(
+                                    child: Text("No capstone with that name"),
+                                  )
+                                : RefreshIndicator(
+                                    key: _refreshKey,
+                                    onRefresh: _refreshCapstoneList,
+                                    child: LoadMore(
+                                      textBuilder: (LoadMoreStatus status) {
+                                        if (status == LoadMoreStatus.loading)
+                                          return "Loading..";
+                                        else
+                                          return "You got the end";
+                                      },
+                                      child: ListView.builder(
+                                        itemBuilder: (context, index) {
+                                          return _getItem(
+                                              (currentState).result[index]);
+                                        },
+                                        itemCount: (currentState).result.length,
+                                      ),
+                                      isFinish:
+                                          (currentState).totalPage == page,
+                                      onLoadMore: () async {
+                                        await Future.delayed(
+                                            Duration(seconds: 2));
+                                        _loadMore();
+                                        return true;
+                                      },
+                                    ),
                                   ),
-                                  isFinish:
-                                      (currentState as CapstoneLoadSuccess)
-                                              .totalPage ==
-                                          page,
-                                  onLoadMore: () async {
-                                    await Future.delayed(Duration(seconds: 2));
-                                    _loadMore();
-                                    return true;
-                                  },
-                                ),
-                              ),
-                      ),
+                          )
+                        : Center(
+                            child: Text("Loading..."),
+                          )
               ],
             ),
           );

@@ -3,6 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constraints.dart';
 
+const studentToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVGFtbnRzZTYyNzUyXHJcbiIsInJvbGUiOiJTdHVkZW50IiwiZW1haWwiOiJ0YW1udHNlNjI3NTJAZnB0LmVkdS52biIsInBpY3R1cmUiOiJodHRwczovL2xoNC5nb29nbGV1c2VyY29udGVudC5jb20vLWZKWE53VUdmQXFVL0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFBL0FNWnV1Y2tzZDJuRVBpSjhHY3ZOeEpMcmhiSGJPc0RjZkEvczk2LWMvcGhvdG8uanBnIiwiZGlzcGxheV9uYW1lIjoiTmd1eWVuIFRoYW5oIFRhbSAtIEsxMSBGVUcgSENNIiwidXNlcl9pZCI6InRod2JCdW8yWEJNUU11ejlIR1VUSFB0cWFnRTMiLCJuYmYiOjE1OTUzMTMwNjgsImV4cCI6MTU5NTkxNzg2OCwiaWF0IjoxNTk1MzEzMDY4fQ.fVshA3k1EuEZSksn_n8cVmSigPHbHpj_kALDK7U4Wkw';
+
 Future<bool> setFCMToken(String value) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.setString('FCMToken', value);
@@ -15,7 +18,7 @@ Future<String> getFCMToken() async {
 
 Future<bool> setToken(String value) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.setString('token', value);
+  return prefs.setString('token', studentToken);
 }
 
 Future<String> getToken() async {

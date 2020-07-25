@@ -12,11 +12,11 @@ import 'package:flutter_login_demo/utils/index.dart';
 import 'blocs/authentication/index.dart';
 import 'repositories/user_repository.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
-
+  await setToken("value");
   runApp(
     BlocProvider(
       create: (context) =>
